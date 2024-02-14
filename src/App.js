@@ -3,7 +3,6 @@ import chroma from 'chroma-js';
 import { ChromePicker } from 'react-color';
 import './App.css'
 
-
 function App() {
     //  const [color, setColor] = useState('#ff0000');
   const [randomColor, setRandomColor] = useState(null);
