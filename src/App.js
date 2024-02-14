@@ -124,7 +124,7 @@ const calculateAverages = () => {
 
   useEffect(() => {
     startNewGame(); // Start a game when the component mounts
-  }, [startNewGame]);
+  }, []);
 
   return (
     <div style={{ height: '100dvh', width: '100%'}}>
