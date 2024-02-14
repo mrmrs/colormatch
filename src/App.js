@@ -19,8 +19,33 @@ const [elapsedTime, setElapsedTime] = useState(0);
   });
   const [showPlayAgain, setShowPlayAgain] = useState(false);
 
+  const [count, setCount] = useState(0);
+
+    const durableObjectName = 'COUNTER_COLORMATCH'; // Replace with the actual name of your Durable Object
+    const fetchCount = async () => {
+        try {
+            const response = await fetch(`https://ts-gen-count.adam-f8f.workers.dev/?name=${durableObjectName}`);
+            const data = await response.text();
+            setCount(data);
+        } catch (error) {
+            console.error('Error fetching count:', error);
+        }
+    };
+
+    const handleIncrement = async () => {
+        try {
+            await fetch(`https://ts-gen-count.adam-f8f.workers.dev/increment?name=${durableObjectName}`, {
+                method: 'POST',
+            });
+            fetchCount(); // Update count after increment
+        } catch (error) {
+            console.error('Error incrementing count:', error);
+        }
+    };
+
   useEffect(() => {
     localStorage.setItem('gameHistory', JSON.stringify(gameHistory));
+    fetchCount();
   }, [gameHistory]);
 
   // Start a new game
@@ -56,10 +81,13 @@ const [elapsedTime, setElapsedTime] = useState(0);
 
   // Submit the selected color and calculate the score
     const handleSubmit = () => {
+
   if (timerId) {
     clearInterval(timerId);
     setTimerId(null);
   }
+
+  handleIncrement()
 
   const currentTime = new Date().getTime();
   const timeInSeconds = (currentTime - startTime) / 1000;
@@ -191,6 +219,7 @@ const calculateAverages = () => {
               <p style={{margin:0}}><b>Time</b>: {averages.avgTime}</p>
               <p style={{margin:0}}><b>Accuracy</b>: {averages.avgAccuracy}</p>
               </div>
+              <small style={{ marginTop: '8px', display: 'block', textAlign: 'center' }}>This game has been played {count} times</small>
         </div>
       </header>
     </div>
