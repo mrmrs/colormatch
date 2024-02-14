@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import chroma from 'chroma-js';
 import { ChromePicker } from 'react-color';
 import './App.css'
@@ -11,8 +13,12 @@ function App() {
   const [score, setScore] = useState(null);
   const [timeTaken, setTimeTaken] = useState('');
   const [accuracy, setAccuracy] = useState('');
-const [elapsedTime, setElapsedTime] = useState(0);
+  const [elapsedTime, setElapsedTime] = useState(0);
   const [timerId, setTimerId] = useState(null);
+  const [highScore, setHighScore] = useState(() => {
+    // Retrieve the high score from local storage or set it to 0
+    return localStorage.getItem('highScore') || 0;
+  });
   const [gameHistory, setGameHistory] = useState(() => {
     const saved = localStorage.getItem('gameHistory');
     return saved ? JSON.parse(saved) : [];
@@ -111,6 +117,16 @@ const [elapsedTime, setElapsedTime] = useState(0);
   setGameHistory(newHistory);
 
   setShowPlayAgain(true);
+
+    if (combinedScore > highScore) {
+        const scoreImprovement = combinedScore - highScore;
+        setHighScore(combinedScore);
+        localStorage.setItem('highScore', combinedScore);
+        
+        // Display a toast notification with the new high score and improvement
+        toast.success(`New high score: ${combinedScore.toFixed(2)}! Improvement: ${scoreImprovement.toFixed(2)} points.`);
+      }
+
 };
 const handleColorInputOpen = () => {
     if (!timerId) { // Start the timer only if it's not already running
@@ -261,6 +277,10 @@ const calculateAverages = () => {
               <small style={{ marginTop: '8px', display: 'block', textAlign: 'center' }}>This game has been played {count} times</small>
         </div>
       </header>
+         <div>
+          <ToastContainer position="top-center" autoClose={5000} />
+          {/* ... rest of your component */}
+        </div>
     </div>
   );
 }
