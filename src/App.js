@@ -5,7 +5,7 @@ import './App.css'
 
 
 function App() {
-  const [color, setColor] = useState('#ff0000');
+    //  const [color, setColor] = useState('#ff0000');
   const [randomColor, setRandomColor] = useState(null);
   const [selectedColor, setSelectedColor] = useState('#F3F0FF');
   const [startTime, setStartTime] = useState(0);
@@ -51,9 +51,9 @@ const [elapsedTime, setElapsedTime] = useState(0);
   };
 
   
-    const handleColorSelection = (color) => {
-        setSelectedColor(color);
-      };
+    // const handleColorSelection = (color) => {
+    //     setSelectedColor(color);
+    //   };
 
   // Submit the selected color and calculate the score
     const handleSubmit = () => {
@@ -125,7 +125,7 @@ const calculateAverages = () => {
 
   useEffect(() => {
     startNewGame(); // Start a game when the component mounts
-  }, []);
+  }, [startNewGame]);
 
   return (
     <div style={{ height: '100dvh', width: '100%'}}>
