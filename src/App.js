@@ -163,12 +163,16 @@ const calculateAverages = () => {
               minWidth: '320px',
               minHeight: '30dvh',
               backgroundColor: randomColor,
-          display: 'flex', alignItems: 'center', justifyContent: 'center'
+              color: chroma.contrast(randomColor, '#ffffff') > 4? 'white' : 'black', 
+              display: 'flex', alignItems: 'center', justifyContent: 'center'
             }} 
       >
         {!showPlayAgain ? (
           <div>
-          <div style={{ background: 'black', color: 'white', display: 'inline-block', padding: '4px', fontSize: '10px', fontFamily: 'monospace' }}>{(elapsedTime / 1000).toFixed(2)} seconds</div>
+              <dl>
+                  <dt style={{ display: 'none' }}>Time</dt>
+                  <dd> {(elapsedTime / 1000).toFixed(2)} seconds</dd>
+              </dl>
 
 
 
@@ -176,11 +180,22 @@ const calculateAverages = () => {
       </div>
         ) : (
       <div>
-          <div style={{ background: 'black', color: 'white', display: 'inline-block', padding: '4px', fontSize: '10px', fontFamily: 'monospace' }}>{timeTaken}</div>
+          <dl>
+              <dt>Time</dt>
+              <dd>
+              {timeTaken}
+              </dd>
+      </dl>
 
         {score && <div>
-          <p>Your Score: {score}</p>
-          <p>Accuracy: {accuracy}</p>
+            <dl>
+                <dt>Score</dt>
+                <dd>{score}</dd>
+            </dl>
+            <dl>
+                <dt>Accuracy</dt>
+                <dd>{accuracy}</dd>
+            </dl>
         </div>}
       </div>
         )}

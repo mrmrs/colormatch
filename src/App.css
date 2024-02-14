@@ -192,3 +192,7 @@ button {
 .animated-button-1::before {
   content: 'Play Again'!important;
 }
+
+dl { font-family: monospace, monospace; }
+dt { font-family: sans-serif; font-size: 14px; }
+dd { margin: 0; }
