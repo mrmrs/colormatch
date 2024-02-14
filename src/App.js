@@ -6,7 +6,7 @@ import './App.css'
 function App() {
     //  const [color, setColor] = useState('#ff0000');
   const [randomColor, setRandomColor] = useState(null);
-  const [selectedColor, setSelectedColor] = useState('#F3F0FF');
+  const [selectedColor, setSelectedColor] = useState('#F3F0FF00');
   const [startTime, setStartTime] = useState(0);
   const [score, setScore] = useState(null);
   const [timeTaken, setTimeTaken] = useState('');
@@ -52,7 +52,7 @@ const [elapsedTime, setElapsedTime] = useState(0);
   const startNewGame = () => {
     const newRandomColor = chroma.random().hex();
     setRandomColor(newRandomColor);
-    setSelectedColor('#F3F3F9');
+    setSelectedColor('#F3F3F900');
     setStartTime(new Date().getTime());
     setScore(null);
     setTimeTaken('');
@@ -162,6 +162,7 @@ const calculateAverages = () => {
             style={{ 
               width: '50%', 
               height: '50dvh', 
+              minHeight: '320px',
               backgroundColor: randomColor,
           display: 'flex', alignItems: 'center', justifyContent: 'center'
             }} 
@@ -189,9 +190,17 @@ const calculateAverages = () => {
               style={{ 
                 width: '50%', 
                 height: '50dvh', 
-                backgroundColor: selectedColor,
+                  minHeight: '320px',
+  backgroundSize: '8px 8px',
+  backgroundImage: 'linear-gradient(to right, #f6f6f6  1px, transparent 1px), linear-gradient(to bottom, #f6f6f6 1px, transparent 1px)',
               }} 
-            />
+            >
+                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%', backgroundColor: selectedColor, }}>
+        <ChromePicker 
+        color={selectedColor} onChange={handleColorChange} 
+    />
+                </div>
+            </div>
         </div>}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
         {!showPlayAgain ? (
@@ -203,13 +212,22 @@ const calculateAverages = () => {
         onClick={handleColorInputOpen} 
         style={{ display: 'none' }}
       />
-        <ChromePicker 
-        color={selectedColor} onChange={handleColorChange} 
-    />
-          <button onClick={handleSubmit} style={{marginTop: '8px', }}>Submit</button>
+            <button onClick={handleSubmit} className='animated-button'> 
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Submit Match
+            </button>
       </div>
         ) : (
-          <button onClick={startNewGame} style={{ marginTop: '8px' }}>Play Again</button>
+      <button onClick={startNewGame} className='animated-button animated-button-1'>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+          Play Again
+      </button>
         )}
       </div>
         <div style={{ position: 'absolute', bottom: '16px', fontSize: '12px', left: 0, right: 0, width: '100%'}}>
