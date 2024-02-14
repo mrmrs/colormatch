@@ -157,12 +157,11 @@ const calculateAverages = () => {
   return (
     <div style={{ height: '100dvh', width: '100%'}}>
       <header style={{position: 'relative', height: '100%' }}>
-        {randomColor && <div style={{ display: 'flex', alignItems: 'center', }}>
+        {randomColor && <div style={{ backgroundColor: randomColor, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',  alignItems: 'center', }}>
           <div 
             style={{ 
-              width: '50%', 
-              height: '50dvh', 
-              minHeight: '320px',
+              minWidth: '320px',
+              minHeight: '30dvh',
               backgroundColor: randomColor,
           display: 'flex', alignItems: 'center', justifyContent: 'center'
             }} 
@@ -188,23 +187,15 @@ const calculateAverages = () => {
           </div>
             <div 
               style={{ 
-                width: '50%', 
+                minWidth: '320px',
                 height: '50dvh', 
-                  minHeight: '320px',
+                  minHeight: '30dvh',
+            backgroundColor: 'white',
   backgroundSize: '8px 8px',
   backgroundImage: 'linear-gradient(to right, #f6f6f6  1px, transparent 1px), linear-gradient(to bottom, #f6f6f6 1px, transparent 1px)',
               }} 
             >
-                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%', backgroundColor: selectedColor, }}>
-        <ChromePicker 
-        color={selectedColor} onChange={handleColorChange} 
-    />
-                </div>
-            </div>
-        </div>}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-        {!showPlayAgain ? (
-            <div style={{textAlign: 'center', paddingTop: '8px' }}>
+                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%', backgroundColor: selectedColor }}>
     <input 
         type="color" 
         value={selectedColor} // Bind the input value to the selectedColor state
@@ -212,6 +203,19 @@ const calculateAverages = () => {
         onClick={handleColorInputOpen} 
         style={{ display: 'none' }}
       />
+        {!showPlayAgain ? (
+        <ChromePicker 
+        color={selectedColor} onChange={handleColorChange} 
+    />
+        ) : (
+        <div></div>
+        )}
+                </div>
+            </div>
+        </div>}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+        {!showPlayAgain ? (
+            <div style={{textAlign: 'center', paddingTop: '8px' }}>
             <button onClick={handleSubmit} className='animated-button'> 
                 <span></span>
                 <span></span>
@@ -221,6 +225,7 @@ const calculateAverages = () => {
             </button>
       </div>
         ) : (
+            <div style={{textAlign: 'center', paddingTop: '8px' }}>
       <button onClick={startNewGame} className='animated-button animated-button-1'>
                 <span></span>
                 <span></span>
@@ -228,6 +233,7 @@ const calculateAverages = () => {
                 <span></span>
           Play Again
       </button>
+  </div>
         )}
       </div>
         <div style={{ position: 'absolute', bottom: '16px', fontSize: '12px', left: 0, right: 0, width: '100%'}}>
