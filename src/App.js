@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import chroma from 'chroma-js';
-import HSLColorPicker from './HSLColorPicker';
 import { ChromePicker } from 'react-color';
 import './App.css'
 
