@@ -94,17 +94,17 @@ const fetchScores = async (category) => {
     fetchCount();
   }, [gameHistory]);
 
+useEffect(() => {
+  const loadScores = async () => {
+    const fetchedDailyScores = await fetchScores('daily');
+    const fetchedAllTimeScores = await fetchScores('all-time');
+    setDailyScores(fetchedDailyScores);
+    setAllTimeScores(fetchedAllTimeScores);
+  };
 
-    useEffect(() => {
-      const loadScores = async () => {
-        const fetchedDailyScores = await fetchScores('daily');
-        const fetchedAllTimeScores = await fetchScores('all-time');
-        setDailyScores(fetchedDailyScores);
-        setAllTimeScores(fetchedAllTimeScores);
-      };
+  loadScores();
+}, []);
 
-      loadScores();
-    }, []);
 
   // Start a new game
   const startNewGame = () => {
@@ -114,7 +114,7 @@ const fetchScores = async (category) => {
       clearInterval(timerId);
       setTimerId(null);
     }
-    setSelectedColor('#FFFFFF');
+    setSelectedColor('#F0F0F0');
     setStartTime(new Date().getTime());
     setScore(null);
     setTimeTaken('');
@@ -344,24 +344,33 @@ const calculateAverages = () => {
 
       
       </div>
-<footer>
-    <h2>Leaders</h2>
- <div>
-      <h2 style={{fontSize: '14px'}}>Today</h2>
-      <ul>
-        {dailyScores.map((score, index) => (
-          <li key={index}>{score.user}: {score.score} Points</li>
+<footer style={{ gap: '32px', justifyContent: 'center' }} className='dn flex-ns'>
+    <div style={{ padding: '24px 48px', borderRadius: '6px', 
+    boxShadow: ' 0 0 2px 0px rgba(0,0,0, .125), 0 0 4px 0px rgba(0,0,0, .125), 0 0 8px 0px rgba(0,0,0, .125), ' 
+    }}>
+      <h2 style={{margin: '0 0 8px 0', fontSize: '14px', textAlign: 'center' }}>Today</h2>
+      <ol style={{fontSize: '12px', padding: 0, margin: 0 }}>
+        {dailyScores.slice(0,10).map((score, index) => (
+          <li key={index}>
+              <b style={{ display: 'inline-block', marginRight: '4px' }}>{score.user}</b> 
+              <code>{score.score.toFixed(3)}</code>
+          </li>
         ))}
-      </ul>
+      </ol>
     </div>
     
-    <div>
-      <h2 style={{fontSize: '14px'}}>All-Time</h2>
-      <ul>
-        {allTimeScores.map((score, index) => (
-          <li key={index}>{score.user}: {score.score} Points</li>
+    <div style={{ padding: '24px 48px', borderRadius: '6px', 
+    boxShadow: ' 0 0 2px 0px rgba(0,0,0, .125), 0 0 4px 0px rgba(0,0,0, .125), 0 0 8px 0px rgba(0,0,0, .125), ' 
+    }}>
+      <h2 style={{margin: '0 0 8px 0', fontSize: '14px', textAlign: 'center' }}>All-Time</h2>
+      <ol style={{fontSize: '12px',  padding: 0, margin: 0}}>
+        {allTimeScores.slice(0,10).map((score, index) => (
+          <li key={index} style={{ }}>
+              <b style={{ display: 'inline-block', marginRight: '4px' }}>{score.user}</b> 
+              <code>{score.score.toFixed(3)}</code>
+        </li>
         ))}
-      </ul>
+      </ol>
     </div>
       </footer>
         <div style={{ position: 'absolute', bottom: '16px', fontSize: '12px', left: 0, right: 0, width: '100%'}}>
