@@ -76,15 +76,8 @@ const submitScore = async (scoreData, category) => {
 };
 
 const fetchScores = async (category) => {
-  let url = `https://colormatch.adam-f8f.workers.dev/get-scores`;
-
-  if (category === 'all-time') {
-    // Fetch the all-time top 100 list
-    url += `?list=all-time-top-100`;
-  } else {
-    // For daily scores, use existing category logic
-    url += `?category=${category}`;
-  }
+  // The category should be either 'daily' or 'all-time'
+  const url = `https://colormatch.adam-f8f.workers.dev/get-scores?category=${category}`;
 
   try {
     const response = await fetch(url);
@@ -358,7 +351,7 @@ const calculateAverages = () => {
     <div style={{ padding: '24px 48px', borderRadius: '6px', 
     boxShadow: ' 0 0 2px 0px rgba(0,0,0, .125), 0 0 4px 0px rgba(0,0,0, .125), 0 0 8px 0px rgba(0,0,0, .125), ' 
     }}>
-      <h2 style={{margin: '0 0 8px 0', fontSize: '14px', textAlign: 'center' }}>High Scores</h2>
+      <h2 style={{margin: '0 0 8px 0', fontSize: '14px', textAlign: 'center' }}>Today</h2>
       <ol style={{fontSize: '12px', padding: 0, margin: 0 }}>
         {dailyScores.slice(0,10).map((score, index) => (
           <li key={index}>
@@ -369,7 +362,7 @@ const calculateAverages = () => {
       </ol>
     </div>
     
-    <div style={{ padding: '24px 48px', borderRadius: '6px',display: 'none', 
+    <div style={{ padding: '24px 48px', borderRadius: '6px',
     boxShadow: ' 0 0 2px 0px rgba(0,0,0, .125), 0 0 4px 0px rgba(0,0,0, .125), 0 0 8px 0px rgba(0,0,0, .125), ' 
     }}>
       <h2 style={{margin: '0 0 8px 0', fontSize: '14px', textAlign: 'center' }}>All-Time</h2>
