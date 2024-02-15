@@ -96,8 +96,8 @@ function App() {
   handleIncrement()
 
   const currentTime = new Date().getTime();
-  const timeInSeconds = (currentTime - startTime) / 1000;
-  setTimeTaken(`${timeInSeconds.toFixed(2)} seconds`);
+    const timeInSeconds = (currentTime - startTime) / 1000;
+    setTimeTaken(timeInSeconds.toFixed(2)); // Store as a string with two decimal places
 
   const calculatedAccuracy = 100 - chroma.distance(randomColor, selectedColor, 'rgb');
   let combinedScore = 0;
@@ -147,10 +147,7 @@ const calculateAverages = () => {
     (acc, game) => {
       acc.totalScore += game.score;
       acc.totalAccuracy += game.accuracy;
-      const timeInSeconds = parseFloat(game.timeTaken.split(' ')[0]); // Parse time as float
-      if (!isNaN(timeInSeconds)) {
-        acc.totalTime += timeInSeconds;
-      }
+      acc.totalTime += game.timeTaken; // Use timeTaken directly as it's a number
       return acc;
     },
     { totalScore: 0, totalAccuracy: 0, totalTime: 0 }
@@ -160,7 +157,7 @@ const calculateAverages = () => {
   return {
     avgScore: (total.totalScore / numGames).toFixed(2),
     avgAccuracy: (total.totalAccuracy / numGames).toFixed(2) + '%',
-    avgTime: total.totalTime > 0 ? (total.totalTime / numGames).toFixed(2) + ' seconds' : 'N/A'
+    avgTime: (total.totalTime / numGames).toFixed(2) + ' seconds'
   };
 };
 
@@ -269,10 +266,10 @@ const calculateAverages = () => {
       </div>
         <div style={{ position: 'absolute', bottom: '16px', fontSize: '12px', left: 0, right: 0, width: '100%'}}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
-              <h2 style={{margin:0, fontSize: '12px'}}>Averages</h2>
-              <p style={{margin:0}}><b>Score</b>: {averages.avgScore}</p>
-              <p style={{margin:0}}><b>Time</b>: {averages.avgTime}</p>
-              <p style={{margin:0}}><b>Accuracy</b>: {averages.avgAccuracy}</p>
+              <p style={{margin:0}}><b>Avg. Score</b>: {averages.avgScore}</p>
+              <p style={{margin:0, display: 'none'}}><b>Time</b>: {averages.avgTime}</p>
+              <p style={{margin:0}}><b>Avg. Accuracy</b>: {averages.avgAccuracy}</p>
+              {highScore && <p style={{margin:0 }}><b>High Score</b>: {parseFloat(highScore).toFixed(3)}</p>}
               </div>
               <small style={{ marginTop: '8px', display: 'block', textAlign: 'center' }}>This game has been played {count} times</small>
         </div>
