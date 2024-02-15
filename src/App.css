@@ -12,6 +12,7 @@ html, body {
 
 
 button { 
+    width: 140px;
     appearance: none;
     -webkit-appearance: none;
 }

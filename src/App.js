@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import chroma from 'chroma-js';
+import { RefreshCcw } from 'feather-icons-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import chroma from 'chroma-js';
 import { ChromePicker } from 'react-color';
 import './App.css'
 
 function App() {
     //  const [color, setColor] = useState('#ff0000');
   const [randomColor, setRandomColor] = useState(null);
-  const [selectedColor, setSelectedColor] = useState('#F3F0FF00');
+  const [selectedColor, setSelectedColor] = useState('');
   const [startTime, setStartTime] = useState(0);
   const [score, setScore] = useState(null);
   const [timeTaken, setTimeTaken] = useState('');
@@ -58,17 +59,17 @@ function App() {
   const startNewGame = () => {
     const newRandomColor = chroma.random().hex();
     setRandomColor(newRandomColor);
-    setSelectedColor('#F3F3F900');
+    if (timerId) {
+      clearInterval(timerId);
+      setTimerId(null);
+    }
+    setSelectedColor('#00000000');
     setStartTime(new Date().getTime());
     setScore(null);
     setTimeTaken('');
     setAccuracy('');
     setShowPlayAgain(false);
     setElapsedTime(0);
-    if (timerId) {
-      clearInterval(timerId);
-      setTimerId(null);
-    }
     const id = setInterval(() => {
       setElapsedTime((prevTime) => prevTime + 10);
     }, 10);
@@ -169,8 +170,11 @@ const calculateAverages = () => {
 
   return (
     <div style={{ height: '100dvh', width: '100%'}}>
-      <header style={{position: 'relative', height: '100%' }}>
-        {randomColor && <div style={{ backgroundColor: randomColor, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',  alignItems: 'center', }}>
+      <header style={{position: 'relative', height: '100%', }}>
+          {randomColor && <div style={{ 
+          backgroundColor: randomColor, 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',  alignItems: 'center', }}>
           <div 
             style={{ 
               minWidth: '320px',
@@ -183,8 +187,9 @@ const calculateAverages = () => {
         {!showPlayAgain ? (
           <div>
               <dl>
-                  <dt style={{ display: 'none' }}>Time</dt>
-                  <dd> {(elapsedTime / 1000).toFixed(2)} seconds</dd>
+                  <dt style={{ visibility: 'hidden' }}>Time</dt>
+                  <dd style={{display:'none'}}> {(elapsedTime / 1000).toFixed(2)} seconds</dd>
+                    <dd> {((new Date().getTime() - startTime) / 1000).toFixed(2)} seconds</dd>
               </dl>
 
 
@@ -193,21 +198,20 @@ const calculateAverages = () => {
       </div>
         ) : (
       <div>
-          <dl>
-              <dt>Time</dt>
-              <dd>
-              {timeTaken}
-              </dd>
-      </dl>
-
         {score && <div>
             <dl>
                 <dt>Score</dt>
-                <dd>{score}</dd>
+                <dd style={{fontSize: '48px', fontWeight: 'bold' }}>{score}</dd>
             </dl>
+          <dl>
+              <dt style={{ marginBottom: '4px' }}>Time</dt>
+              <dd>
+                  <b>{timeTaken}</b> seconds
+              </dd>
+          </dl>
             <dl>
-                <dt>Accuracy</dt>
-                <dd>{accuracy}</dd>
+              <dt style={{ marginBottom: '4px' }}>Accuracy</dt>
+                <dd style={{fontWeight: 'bold'}}>{accuracy}</dd>
             </dl>
         </div>}
       </div>
@@ -254,12 +258,12 @@ const calculateAverages = () => {
       </div>
         ) : (
             <div style={{textAlign: 'center', paddingTop: '8px' }}>
-      <button onClick={startNewGame} className='animated-button animated-button-1'>
+      <button onClick={startNewGame} className='animated-button animated-button-1' style={{whiteSpace: 'nowrap', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px'}}>
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
-          Play Again
+                Play Again
       </button>
   </div>
         )}
