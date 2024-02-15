@@ -317,7 +317,21 @@ const calculateAverages = () => {
         color={selectedColor} onChange={handleColorChange} 
     />
         ) : (
-        <div></div>
+<div style={{ padding: '24px 64px', borderRadius: '4px', 
+    backgroundColor: 'white',
+    boxShadow: ' 0 0 2px 0px rgba(0,0,0, .125), 0 0 4px 0px rgba(0,0,0, .125), 0 0 8px 0px rgba(0,0,0, .125) ' 
+    }} className='db dn-ns'>
+      <h2 style={{margin: '0 0 0px 0', fontSize: '12px', textAlign: 'center' }}>High Scores</h2>
+      <h3 style={{margin: '0 0 8px 0', fontSize: '10px', textAlign: 'center', color: '#777788' }}>Today</h3>
+      <ol style={{fontSize: '12px', padding: 0, margin: 0, lineHeight: 1., lineHeight: 1.55 }}>
+        {dailyScores.slice(0,10).map((score, index) => (
+          <li key={index}>
+              <b style={{ display: 'inline-block', marginRight: '4px' }}>{score.user}</b> 
+              <code>{score.score.toFixed(3)}</code>
+          </li>
+        ))}
+      </ol>
+    </div>
         )}
                 </div>
             </div>
