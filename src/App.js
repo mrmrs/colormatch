@@ -200,7 +200,7 @@ useEffect(() => {
   };
 
   // Submit the score
-  submitScore(scoreData);
+  submitScore(scoreData, 'daily');
 
 };
 const handleColorInputOpen = () => {
