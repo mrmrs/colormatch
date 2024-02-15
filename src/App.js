@@ -16,6 +16,9 @@ function App() {
   const [accuracy, setAccuracy] = useState('');
   const [elapsedTime, setElapsedTime] = useState(0);
   const [timerId, setTimerId] = useState(null);
+const [dailyScores, setDailyScores] = useState([]);
+const [allTimeScores, setAllTimeScores] = useState([]);
+  const [username, setUsername] = useState(() => localStorage.getItem('username') || '');
   const [highScore, setHighScore] = useState(() => {
     // Retrieve the high score from local storage or set it to 0
     return localStorage.getItem('highScore') || 0;
@@ -50,10 +53,58 @@ function App() {
         }
     };
 
+const submitScore = async (scoreData, category) => {
+  const dataWithCategory = { ...scoreData, category }; // Add category to the score data
+
+  try {
+    const response = await fetch('https://colormatch.adam-f8f.workers.dev/submit-score', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataWithCategory),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    console.log("Score submitted successfully");
+  } catch (error) {
+    console.error("Failed to submit score:", error);
+  }
+};
+
+const fetchScores = async (category) => {
+  try {
+    const response = await fetch(`https://colormatch.adam-f8f.workers.dev/get-scores?category=${category}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const scores = await response.json();
+    return scores;
+  } catch (error) {
+    console.error("Failed to fetch scores:", error);
+    return [];
+  }
+};
+
   useEffect(() => {
     localStorage.setItem('gameHistory', JSON.stringify(gameHistory));
     fetchCount();
   }, [gameHistory]);
+
+
+    useEffect(() => {
+      const loadScores = async () => {
+        const fetchedDailyScores = await fetchScores('daily');
+        const fetchedAllTimeScores = await fetchScores('all-time');
+        setDailyScores(fetchedDailyScores);
+        setAllTimeScores(fetchedAllTimeScores);
+      };
+
+      loadScores();
+    }, []);
 
   // Start a new game
   const startNewGame = () => {
@@ -63,7 +114,7 @@ function App() {
       clearInterval(timerId);
       setTimerId(null);
     }
-    setSelectedColor('#00000000');
+    setSelectedColor('#FFFFFF');
     setStartTime(new Date().getTime());
     setScore(null);
     setTimeTaken('');
@@ -96,6 +147,18 @@ function App() {
 
   handleIncrement()
 
+  if (!username) {
+    const enteredUsername = prompt('Please enter your username:');
+    if (enteredUsername) {
+      setUsername(enteredUsername);
+      localStorage.setItem('username', enteredUsername);
+    } else {
+      // Handle the case where user does not enter a username
+      // You might want to remind them or prevent score submission
+      return; // Prevent further action
+    }
+  }
+
   const currentTime = new Date().getTime();
     const timeInSeconds = (currentTime - startTime) / 1000;
     setTimeTaken(timeInSeconds.toFixed(2)); // Store as a string with two decimal places
@@ -127,6 +190,17 @@ function App() {
         // Display a toast notification with the new high score and improvement
         toast.success(`New high score: ${combinedScore.toFixed(2)}! Improvement: ${scoreImprovement.toFixed(2)} points.`);
       }
+
+ // Prepare score data
+  const scoreData = {
+    user: username, // Replace with actual user identification
+    score: combinedScore,
+    accuracy: calculatedAccuracy,
+    // ... any other relevant data
+  };
+
+  // Submit the score
+  submitScore(scoreData);
 
 };
 const handleColorInputOpen = () => {
@@ -267,17 +341,40 @@ const calculateAverages = () => {
       </button>
   </div>
         )}
+
+      
       </div>
+<footer>
+    <h2>Leaders</h2>
+ <div>
+      <h2 style={{fontSize: '14px'}}>Today</h2>
+      <ul>
+        {dailyScores.map((score, index) => (
+          <li key={index}>{score.user}: {score.score} Points</li>
+        ))}
+      </ul>
+    </div>
+    
+    <div>
+      <h2 style={{fontSize: '14px'}}>All-Time</h2>
+      <ul>
+        {allTimeScores.map((score, index) => (
+          <li key={index}>{score.user}: {score.score} Points</li>
+        ))}
+      </ul>
+    </div>
+      </footer>
         <div style={{ position: 'absolute', bottom: '16px', fontSize: '12px', left: 0, right: 0, width: '100%'}}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
               <p style={{margin:0}}><b>Avg. Score</b>: {averages.avgScore}</p>
               <p style={{margin:0, display: 'none'}}><b>Time</b>: {averages.avgTime}</p>
               <p style={{margin:0}}><b>Avg. Accuracy</b>: {averages.avgAccuracy}</p>
-              {highScore && <p style={{margin:0 }}><b>High Score</b>: {parseFloat(highScore).toFixed(3)}</p>}
+              {highScore && <p style={{margin:0 }}><mark><b>High Score</b>: {parseFloat(highScore).toFixed(3)}</mark></p>}
               </div>
               <small style={{ marginTop: '8px', display: 'block', textAlign: 'center' }}>This game has been played {count} times</small>
         </div>
       </header>
+
          <div>
           <ToastContainer position="top-center" autoClose={5000} />
           {/* ... rest of your component */}
