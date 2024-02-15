@@ -99,7 +99,7 @@ function App() {
     const timeInSeconds = (currentTime - startTime) / 1000;
     setTimeTaken(timeInSeconds.toFixed(2)); // Store as a string with two decimal places
 
-  const calculatedAccuracy = 100 - chroma.distance(randomColor, selectedColor, 'rgb');
+  const calculatedAccuracy = 100 - chroma.deltaE(randomColor, selectedColor);
   let combinedScore = 0;
 
   if (calculatedAccuracy > 0) {
