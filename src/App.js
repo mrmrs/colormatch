@@ -59,8 +59,6 @@ const submitScore = async (scoreData, category) => {
  const dataWithCategory = { 
     ...scoreData, 
     category,
-    selectedColor: selectedColor, // Add the selected color
-    randomColor: randomColor // Add the random color
   };
 
   try {
@@ -209,10 +207,12 @@ useEffect(() => {
 
  // Prepare score data
   const scoreData = {
-    user: username, // Replace with actual user identification
+     user: username,
     score: combinedScore,
     accuracy: calculatedAccuracy,
-    // ... any other relevant data
+    timeTaken: timeTaken, 
+    selectedColor: selectedColor,
+    randomColor: randomColor
   };
 
   // Submit the score
