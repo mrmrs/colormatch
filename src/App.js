@@ -16,8 +16,10 @@ function App() {
   const [accuracy, setAccuracy] = useState('');
   const [elapsedTime, setElapsedTime] = useState(0);
   const [timerId, setTimerId] = useState(null);
-const [dailyScores, setDailyScores] = useState([]);
-const [allTimeScores, setAllTimeScores] = useState([]);
+  const [dailyScores, setDailyScores] = useState([]);
+  const [allTimeScores, setAllTimeScores] = useState([]);
+  const [pixelPerfectBadge, setPixelPerfectBadge] = useState(false);
+
   const [username, setUsername] = useState(() => localStorage.getItem('username') || '');
   const [highScore, setHighScore] = useState(() => {
     // Retrieve the high score from local storage or set it to 0
@@ -129,6 +131,7 @@ useEffect(() => {
     setAccuracy('');
     setShowPlayAgain(false);
     setElapsedTime(0);
+    setPixelPerfectBadge(false)
     const id = setInterval(() => {
       setElapsedTime((prevTime) => prevTime + 10);
     }, 10);
@@ -148,56 +151,56 @@ useEffect(() => {
   // Submit the selected color and calculate the score
     const handleSubmit = () => {
 
-  if (timerId) {
-    clearInterval(timerId);
-    setTimerId(null);
-  }
-
-  handleIncrement()
-
-  if (!username) {
-    const enteredUsername = prompt('Please enter your username:');
-    if (enteredUsername) {
-      setUsername(enteredUsername);
-      localStorage.setItem('username', enteredUsername);
-    } else {
-      // Handle the case where user does not enter a username
-      // You might want to remind them or prevent score submission
-      return; // Prevent further action
-    }
-  }
-
-  const currentTime = new Date().getTime();
-    const timeInSeconds = (currentTime - startTime) / 1000;
-    setTimeTaken(timeInSeconds.toFixed(2)); // Store as a string with two decimal places
-
-  const calculatedAccuracy = 100 - chroma.deltaE(randomColor, selectedColor);
-  let combinedScore = 0;
-
-  if (calculatedAccuracy > 0) {
-    const accuracyPercentage = Math.max(0, calculatedAccuracy);
-    setAccuracy(`${accuracyPercentage.toFixed(2)}%`);
-    combinedScore = (accuracyPercentage + (100 - timeInSeconds)) / 2;
-  } else {
-    setAccuracy("0%");
-  }
-
-  setScore(combinedScore.toFixed(2));
-
-  // Update game history
-  const newHistory = [...gameHistory, { score: combinedScore, timeTaken, accuracy: calculatedAccuracy }];
-  setGameHistory(newHistory);
-
-  setShowPlayAgain(true);
-
-    if (combinedScore > highScore) {
-        const scoreImprovement = combinedScore - highScore;
-        setHighScore(combinedScore);
-        localStorage.setItem('highScore', combinedScore);
-        
-        // Display a toast notification with the new high score and improvement
-        toast.success(`New high score: ${combinedScore.toFixed(2)}! Improvement: ${scoreImprovement.toFixed(2)} points.`);
+      if (timerId) {
+        clearInterval(timerId);
+        setTimerId(null);
       }
+
+      handleIncrement()
+
+      if (!username) {
+        const enteredUsername = prompt('Please enter your username:');
+        if (enteredUsername) {
+          setUsername(enteredUsername);
+          localStorage.setItem('username', enteredUsername);
+        } else {
+          // Handle the case where user does not enter a username
+          // You might want to remind them or prevent score submission
+          return; // Prevent further action
+        }
+      }
+
+      const currentTime = new Date().getTime();
+        const timeInSeconds = (currentTime - startTime) / 1000;
+        setTimeTaken(timeInSeconds.toFixed(2)); // Store as a string with two decimal places
+
+      const calculatedAccuracy = 100 - chroma.deltaE(randomColor, selectedColor);
+      let combinedScore = 0;
+
+      if (calculatedAccuracy > 0) {
+        const accuracyPercentage = Math.max(0, calculatedAccuracy);
+        setAccuracy(`${accuracyPercentage.toFixed(2)}%`);
+        combinedScore = (accuracyPercentage + (100 - timeInSeconds)) / 2;
+      } else {
+        setAccuracy("0%");
+      }
+
+      setScore(combinedScore.toFixed(2));
+
+      // Update game history
+      const newHistory = [...gameHistory, { score: combinedScore, timeTaken, accuracy: calculatedAccuracy }];
+      setGameHistory(newHistory);
+
+      setShowPlayAgain(true);
+
+        if (combinedScore > highScore) {
+            const scoreImprovement = combinedScore - highScore;
+            setHighScore(combinedScore);
+            localStorage.setItem('highScore', combinedScore);
+            
+            // Display a toast notification with the new high score and improvement
+            toast.success(`New high score: ${combinedScore.toFixed(2)}! Improvement: ${scoreImprovement.toFixed(2)} points.`);
+          }
 
  // Prepare score data
   const scoreData = {
@@ -208,7 +211,13 @@ useEffect(() => {
   };
 
   // Submit the score
-  submitScore(scoreData, 'daily');
+   submitScore(scoreData, 'daily');
+
+    if (calculatedAccuracy === 100) {
+        setPixelPerfectBadge(true);
+        // can save this information in localStorage or a database
+    }
+
 
 };
 const handleColorInputOpen = () => {
@@ -312,7 +321,15 @@ const calculateAverages = () => {
               <dt style={{ marginBottom: '4px' }}>Accuracy</dt>
                 <dd style={{fontWeight: 'bold'}}>{accuracy}</dd>
             </dl>
-        </div>}
+            </div>
+        }
+
+            {score > dailyScores[dailyScores.length-1].score &&  
+            <span style={{ fontWeight: 700, fontSize: '10px', borderRadius: '9999px', background: 'yellow', color: 'black', padding: '4px 16px' }}>🎪 Top 100 </span>
+            }
+            {accuracy > 99 &&  
+            <span style={{ fontWeight: 700, fontSize: '10px', borderRadius: '9999px', background: 'yellow', color: 'black', padding: '4px 16px' }}>🔭 Super Vision Lv 4</span>
+            }
       </div>
         )}
           </div>
