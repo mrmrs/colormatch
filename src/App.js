@@ -173,6 +173,11 @@ useEffect(() => {
       const currentTime = new Date().getTime();
         const timeInSeconds = (currentTime - startTime) / 1000;
         setTimeTaken(timeInSeconds.toFixed(2)); // Store as a string with two decimal places
+        if (currentTime - startTime < 500) {
+          // Penalize the score: Reduce the score by 50% as a penalty
+          combinedScore *= 0.5;
+          console.log("Computer aided humans get penalized")
+        }
 
       const calculatedAccuracy = 100 - chroma.deltaE(randomColor, selectedColor);
       let combinedScore = 0;
