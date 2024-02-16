@@ -54,7 +54,12 @@ const [allTimeScores, setAllTimeScores] = useState([]);
     };
 
 const submitScore = async (scoreData, category) => {
-  const dataWithCategory = { ...scoreData, category }; // Add category to the score data
+ const dataWithCategory = { 
+    ...scoreData, 
+    category,
+    selectedColor: selectedColor, // Add the selected color
+    randomColor: randomColor // Add the random color
+  };
 
   try {
     const response = await fetch('https://colormatch.adam-f8f.workers.dev/submit-score', {
@@ -244,6 +249,23 @@ const calculateAverages = () => {
   useEffect(() => {
     startNewGame(); // Start a game when the component mounts
   }, []);
+
+    useEffect(() => {
+      // Function to handle key press
+      const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+          handleSubmit(); // Call your existing submit function
+        }
+      };
+
+      // Add event listener
+      document.addEventListener('keydown', handleKeyPress);
+
+      // Remove event listener on cleanup
+      return () => {
+        document.removeEventListener('keydown', handleKeyPress);
+      };
+    }, [handleSubmit]);
 
   return (
     <div style={{ height: '100dvh', width: '100%'}}>
