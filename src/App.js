@@ -17,7 +17,7 @@ const Badge = ({ color = 'black', backgroundColor, ...props }) => {
 function App() {
     //  const [color, setColor] = useState('#ff0000');
   const [randomColor, setRandomColor] = useState(null);
-  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedColor, setSelectedColor] = useState('#ffffff');
   const [startTime, setStartTime] = useState(0);
   const [score, setScore] = useState(null);
   const [timeTaken, setTimeTaken] = useState(0);
@@ -165,7 +165,7 @@ useEffect(() => {
       handleIncrement()
 
       if (!username) {
-        const enteredUsername = prompt('Please enter your username:');
+        const enteredUsername = prompt('Please enter your username:', 'Anonymous');
         if (enteredUsername) {
           setUsername(enteredUsername);
           localStorage.setItem('username', enteredUsername);
@@ -290,7 +290,9 @@ const calculateAverages = () => {
     }, [handleSubmit]);
 
   return (
-      <div style={{ height: '100dvh', width: '100%', backgroundImage: 'linear-gradient(to right, #f6f6f6  1px, transparent 1px), linear-gradient(to bottom, #f6f6f6 1px, transparent 1px)',
+      <div style={{ height: '100dvh', width: '100%', 
+      backgroundColor: selectedColor,
+      //backgroundSize: '8px 8px',  backgroundImage: 'linear-gradient(to right, #f6f6f6  1px, transparent 1px), linear-gradient(to bottom, #f6f6f6 1px, transparent 1px)',
       }}>
       <header style={{position: 'relative', height: '100%', }}>
           {randomColor && <div style={{ 
@@ -300,7 +302,7 @@ const calculateAverages = () => {
           <div 
             style={{ 
               minWidth: '320px',
-              minHeight: '30dvh',
+              minHeight: '40dvh',
               backgroundColor: randomColor,
               color: chroma.contrast(randomColor, '#ffffff') > 4? 'white' : 'black', 
               display: 'flex', alignItems: 'center', justifyContent: 'center'
@@ -372,13 +374,13 @@ const calculateAverages = () => {
             <div 
               style={{ 
                 minWidth: '320px',
-                minHeight: '30dvh',
-            backgroundColor: 'white',
-  backgroundSize: '8px 8px',
-  backgroundImage: 'linear-gradient(to right, #f6f6f6  1px, transparent 1px), linear-gradient(to bottom, #f6f6f6 1px, transparent 1px)',
+                minHeight: '40dvh',
+            height: '100%',
+            backgroundColor: selectedColor,
+            padding: '16px'
               }} 
             >
-                <div style={{ padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%', backgroundColor: selectedColor }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%', backgroundColor: selectedColor }}>
     <input 
         type="color" 
         value={selectedColor} // Bind the input value to the selectedColor state
@@ -392,15 +394,15 @@ const calculateAverages = () => {
         color={selectedColor} onChange={handleColorChange} 
     />
         ) : (
-<div style={{ padding: '24px 64px', borderRadius: '4px', 
-    backgroundColor: 'white',
-    boxShadow: ' 0 0 2px 0px rgba(0,0,0, .125), 0 0 4px 0px rgba(0,0,0, .125), 0 0 8px 0px rgba(0,0,0, .125) ' 
+<div style={{ 
+      display: 'block', 
+      color: chroma.contrast(selectedColor, '#ffffff') > 4? 'white' : 'black', 
     }} className='db dn-ns'>
       <h2 style={{margin: '0 0 0px 0', fontSize: '12px', textAlign: 'center' }}>High Scores</h2>
-      <h3 style={{margin: '0 0 8px 0', fontSize: '10px', textAlign: 'center', color: '#777788' }}>Today</h3>
+      <h3 style={{margin: '0 0 8px 0', fontSize: '10px', textAlign: 'center', color: 'inherit', opacity: .5 }}>Today</h3>
       <ol style={{fontSize: '12px', padding: 0, margin: 0, lineHeight: 1., lineHeight: 1.55 }}>
         {dailyScores.slice(0,10).map((score, index) => (
-          <li key={index}>
+          <li key={index} style={{ fontSize: '10px', minWidth: '192px', padding: '2px 0', borderBottom: '1px solid', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '32px' }}>
               <b style={{ display: 'inline-block', marginRight: '4px' }}>{score.user}</b> 
               <code>{score.score.toFixed(3)}</code>
           </li>
@@ -411,9 +413,9 @@ const calculateAverages = () => {
                 </div>
             </div>
         </div>}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', }}>
         {!showPlayAgain ? (
-            <div style={{textAlign: 'center', paddingTop: '8px' }}>
+            <div style={{textAlign: 'center', paddingTop: '8px', }}>
             <button onClick={handleSubmit} className='animated-button'> 
                 <span></span>
                 <span></span>
@@ -423,7 +425,7 @@ const calculateAverages = () => {
             </button>
       </div>
         ) : (
-            <div style={{textAlign: 'center', paddingTop: '8px' }}>
+            <div style={{textAlign: 'center' }}>
       <button onClick={startNewGame} className='animated-button animated-button-1' style={{whiteSpace: 'nowrap', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px'}}>
                 <span></span>
                 <span></span>
@@ -445,7 +447,10 @@ const calculateAverages = () => {
         {dailyScores.slice(0,10).map((score, index) => (
           <li key={index}>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
-                  <b style={{ display: 'inline-block', marginLeft: '4px', marginRight: '4px' }}>{score.user}</b> 
+                  <b style={{  marginLeft: '4px', marginRight: '4px' }}>
+                      A
+                      {score.user}
+                  </b> 
                   <code>{score.score.toFixed(3)}</code>
               </div>
           </li>
@@ -467,14 +472,18 @@ const calculateAverages = () => {
       </ol>
     </div>
       </footer>
-        <div style={{position: 'absolute', bottom: '8px', fontSize: '12px', left: 0, right: 0, width: '100%'}}>
+        <div style={{position: 'absolute', zIndex: 0, bottom: '8px', fontSize: '12px', left: 0, right: 0, width: '100%'}}>
+            <div className='dn db-ns'>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', padding: '0 16px' }}>
               <p style={{margin:0}}><b>Avg. Score</b>: {averages.avgScore}</p>
               <p style={{margin:0, display: 'none'}}><b>Time</b>: {averages.avgTime}</p>
               <p style={{margin:0}}><b>Avg. Accuracy</b>: {averages.avgAccuracy}</p>
               {highScore && <p style={{margin:0 }}><mark><b>High Score</b>: {parseFloat(highScore).toFixed(3)}</mark></p>}
               </div>
-              <small style={{ marginTop: '8px', display: 'block', textAlign: 'center' }}>This game has been played {count} times</small>
+          </div>
+          <small style={{ marginTop: '8px', display: 'block', textAlign: 'center', 
+              color: chroma.contrast(selectedColor, '#ffffff') > 4? 'white' : 'black', 
+          }}>This game has been played {count} times</small>
         </div>
       </header>
 
