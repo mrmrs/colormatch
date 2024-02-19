@@ -457,14 +457,11 @@ const calculateAverages = () => {
 
       
       </div>
-      <footer style={{ gap: '32px', justifyContent: 'center', 
-      }}
+      <footer style={{ gap: '32px', justifyContent: 'space-between', padding: '32px 16px 0px 16px', margin: '0 auto', maxWidth: '800px' }}
       className='dn flex-ns'>
       <div style={{ 
-      color: chroma.contrast(selectedColor, '#ffffff') > 4.5? 'white' : 'black', 
-      padding: '24px 48px', borderRadius: '6px', 
-    boxShadow: ' 0 0 2px 0px rgba(0,0,0, .125), 0 0 4px 0px rgba(0,0,0, .125), 0 0 8px 0px rgba(0,0,0, .125), ' 
-    }}>
+          color: chroma.contrast(selectedColor, '#ffffff') > 4.5? 'white' : 'black', 
+        }}>
       <h2 style={{margin: '0 0 8px 0', fontSize: '14px', textAlign: 'center' }}>Today</h2>
       <ol style={{fontSize: '12px', padding: 0, margin: 0, textAlign: 'left', }}>
         {dailyScores.slice(0,10).map((score, index) => (
@@ -476,11 +473,7 @@ const calculateAverages = () => {
       </ol>
     </div>
     
-    <div style={{ 
-      color: chroma.contrast(selectedColor, '#ffffff') > 4.5? 'white' : 'black', 
-        padding: '24px 48px', borderRadius: '6px',
-        boxShadow: ' 0 0 2px 0px rgba(0,0,0, .125), 0 0 4px 0px rgba(0,0,0, .125), 0 0 8px 0px rgba(0,0,0, .125), ' 
-    }}>
+    <div style={{ color: chroma.contrast(selectedColor, '#ffffff') > 4.5? 'white' : 'black' }}>
       <h2 style={{ margin: '0 0 8px 0', fontSize: '14px', textAlign: 'center' }}>All-Time</h2>
       <ol style={{ fontSize: '12px',  padding: 0, margin: 0 }}>
         {allTimeScores.slice(0,10).map((score, index) => (
@@ -492,10 +485,8 @@ const calculateAverages = () => {
       </ol>
 
             
-      </div><div className='dn db-ns' style={{
-      color: chroma.contrast(selectedColor, '#ffffff') > 4.5? 'white' : 'black', 
-      padding: '24px 48px'}}>
-    <h4 style={{fontSize: '14px', margin: '0 0 8px 0' }}>Stats</h4>
+      </div><div className='dn db-ns' style={{ color: chroma.contrast(selectedColor, '#ffffff') > 4.5? 'white' : 'black' }}>
+    <h4 style={{fontSize: '14px', margin: '0 0 8px 0', minWidth: '192px' }}>Stats</h4>
             <div style={{ fontSize: '10px', lineHeight: 1.75 }}>
                 <p style={{ borderBottom: '1px solid', margin:0, display: 'flex', justifyContent: 'space-between' }}><b>Avg. Score:</b> <code>{averages.avgScore}</code></p>
                 <p style={{ borderBottom: '1px solid', margin:0, gap: '16px', display: 'flex', justifyContent: 'space-between' }}><b>Avg. Accuracy:</b> <code>{averages.avgAccuracy}</code></p>
