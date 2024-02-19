@@ -381,11 +381,11 @@ const calculateAverages = () => {
               style={{ 
                 minWidth: '320px',
                 minHeight: '40dvh',
-            height: '100%',
             backgroundColor: selectedColor,
             paddingLeft: '16px',
             paddingRight: '16px',
             paddingTop: '16px',
+            paddingBottom: '16px',
               }} 
             >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', maxWidth: '100%', width: '100%', backgroundColor: selectedColor }}>
@@ -405,7 +405,6 @@ const calculateAverages = () => {
     />
         ) : (
 <div style={{ 
-      display: 'block', 
       color: chroma.contrast(selectedColor, '#ffffff') > 4? 'white' : 'black', 
     }} className='db dn-ns'>
       <h2 style={{margin: '0 0 0px 0', fontSize: '12px', textAlign: 'center' }}>High Scores</h2>
@@ -455,14 +454,9 @@ const calculateAverages = () => {
       <h2 style={{margin: '0 0 8px 0', fontSize: '14px', textAlign: 'center' }}>Today</h2>
       <ol style={{fontSize: '12px', padding: 0, margin: 0, textAlign: 'left', }}>
         {dailyScores.slice(0,10).map((score, index) => (
-          <li key={index}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
-                  <b style={{  marginLeft: '4px', marginRight: '4px' }}>
-                      A
-                      {score.user}
-                  </b> 
-                  <code>{score.score.toFixed(3)}</code>
-              </div>
+          <li key={index} style={{ fontSize: '10px', minWidth: '192px', padding: '2px 0', borderBottom: '1px solid', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '32px' }}>
+              <b style={{ display: 'inline-block', marginRight: '4px' }}>{score.user}</b> 
+              <code>{score.score.toFixed(3)}</code>
           </li>
         ))}
       </ol>
@@ -472,25 +466,26 @@ const calculateAverages = () => {
     boxShadow: ' 0 0 2px 0px rgba(0,0,0, .125), 0 0 4px 0px rgba(0,0,0, .125), 0 0 8px 0px rgba(0,0,0, .125), ' 
     }}>
       <h2 style={{margin: '0 0 8px 0', fontSize: '14px', textAlign: 'center' }}>All-Time</h2>
-      <ol style={{fontSize: '12px',  padding: 0, margin: 0}}>
+      <ol style={{fontSize: '12px',  padding: 0, margin: 0 }}>
         {allTimeScores.slice(0,10).map((score, index) => (
-          <li key={index} style={{ }}>
+          <li key={index} style={{ fontSize: '10px', minWidth: '192px', padding: '2px 0', borderBottom: '1px solid', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '32px' }}>
               <b style={{ display: 'inline-block', marginRight: '4px' }}>{score.user}</b> 
               <code>{score.score.toFixed(3)}</code>
         </li>
         ))}
       </ol>
-    </div>
-      </footer>
-        <div style={{position: 'absolute', zIndex: 0, bottom: '16px', fontSize: '12px', left: 0, right: 0, width: '100%'}}>
-            <div className='dn db-ns'>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', padding: '0 16px' }}>
-              <p style={{margin:0}}><b>Avg. Score</b>: {averages.avgScore}</p>
-              <p style={{margin:0, display: 'none'}}><b>Time</b>: {averages.avgTime}</p>
-              <p style={{margin:0}}><b>Avg. Accuracy</b>: {averages.avgAccuracy}</p>
-              {highScore && <p style={{margin:0 }}><mark><b>High Score</b>: {parseFloat(highScore).toFixed(3)}</mark></p>}
+
+            
+    </div><div className='dn db-ns' style={{padding: '24px 48px'}}>
+    <h4 style={{fontSize: '14px', margin: '0 0 8px 0' }}>Stats</h4>
+            <div style={{ fontSize: '10px', lineHeight: 1.75 }}>
+                <p style={{ borderBottom: '1px solid', margin:0, display: 'flex', justifyContent: 'space-between' }}><b>Avg. Score:</b> <code>{averages.avgScore}</code></p>
+                <p style={{ borderBottom: '1px solid', margin:0, gap: '16px', display: 'flex', justifyContent: 'space-between' }}><b>Avg. Accuracy:</b> <code>{averages.avgAccuracy}</code></p>
+                {highScore && <p style={{borderBottom: '1px solid', margin:0, display: 'flex', justifyContent: 'space-between'  }}><b>High Score:</b> <code><mark>{parseFloat(highScore).toFixed(3)}</mark></code></p>}
               </div>
           </div>
+      </footer>
+        <div style={{position: 'absolute', zIndex: 0, bottom: '16px', fontSize: '12px', left: 0, right: 0, width: '100%'}}>
           <small style={{ marginTop: '8px', display: 'block', textAlign: 'center', 
               color: chroma.contrast(selectedColor, '#ffffff') > 4? 'white' : 'black', 
           }}>This game has been played {count} times</small>
