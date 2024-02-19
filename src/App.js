@@ -6,6 +6,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ChromePicker } from 'react-color';
 import './App.css'
 
+const Badge = ({ color = 'black', backgroundColor, ...props }) => {
+    return (
+        <span style={{ fontSize: '10px', whiteSpace: 'nowrap', fontWeight: 700, padding: '4px 16px', borderRadius: '9999px', backgroundColor: backgroundColor, color: color }}>
+            {props.children}
+        </span>
+    )
+}
+
 function App() {
     //  const [color, setColor] = useState('#ff0000');
   const [randomColor, setRandomColor] = useState(null);
@@ -13,7 +21,7 @@ function App() {
   const [startTime, setStartTime] = useState(0);
   const [score, setScore] = useState(null);
   const [timeTaken, setTimeTaken] = useState(0);
-  const [accuracy, setAccuracy] = useState('');
+  const [accuracy, setAccuracy] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [timerId, setTimerId] = useState(null);
   const [dailyScores, setDailyScores] = useState([]);
@@ -168,25 +176,25 @@ useEffect(() => {
         }
       }
 
-      const currentTime = new Date().getTime();
+        const currentTime = new Date().getTime();
         const timeInSeconds = (currentTime - startTime) / 1000;
-        setTimeTaken(timeInSeconds.toFixed(2)); // Store as a string with two decimal places
+        setTimeTaken(timeInSeconds.toFixed(2));
+
+        const calculatedAccuracy = 100 - chroma.deltaE(randomColor, selectedColor);
+        let combinedScore = 0; // Declare and initialize combinedScore here
+
         if (currentTime - startTime < 500) {
-          // Penalize the score: Reduce the score by 50% as a penalty
-          combinedScore *= 0.5;
-          console.log("Computer aided humans get penalized")
+            // Penalize the score: Reduce the score by 50% as a penalty
+            combinedScore *= 0.5;
+            console.log("Computer aided humans get penalized")
         }
 
-      const calculatedAccuracy = 100 - chroma.deltaE(randomColor, selectedColor);
-      let combinedScore = 0;
-
-      if (calculatedAccuracy > 0) {
-        const accuracyPercentage = Math.max(0, calculatedAccuracy);
-        setAccuracy(`${accuracyPercentage.toFixed(2)}%`);
-        combinedScore = (accuracyPercentage + (100 - timeInSeconds)) / 2;
-      } else {
-        setAccuracy("0%");
-      }
+        if (calculatedAccuracy > 0) {
+          setAccuracy(calculatedAccuracy); // Set as a number
+          combinedScore = (calculatedAccuracy + (100 - timeInSeconds)) / 2;
+        } else {
+          setAccuracy(0); // Set as 0 if accuracy is negative
+        }
 
       setScore(combinedScore.toFixed(2));
 
@@ -282,7 +290,8 @@ const calculateAverages = () => {
     }, [handleSubmit]);
 
   return (
-    <div style={{ height: '100dvh', width: '100%'}}>
+      <div style={{ height: '100dvh', width: '100%', backgroundImage: 'linear-gradient(to right, #f6f6f6  1px, transparent 1px), linear-gradient(to bottom, #f6f6f6 1px, transparent 1px)',
+      }}>
       <header style={{position: 'relative', height: '100%', }}>
           {randomColor && <div style={{ 
           backgroundColor: randomColor, 
@@ -324,17 +333,28 @@ const calculateAverages = () => {
           </dl>
             <dl>
               <dt style={{ marginBottom: '4px' }}>Accuracy</dt>
-                <dd style={{fontWeight: 'bold'}}>{accuracy}</dd>
+                <dd style={{fontWeight: 'bold'}}>{accuracy}%</dd>
             </dl>
             </div>
         }
 
+            <div style={{ display: 'flex', gap: '8px'}}>
             {score > dailyScores[dailyScores.length-1].score &&  
-            <span style={{ fontWeight: 700, fontSize: '10px', borderRadius: '9999px', background: 'yellow', color: 'black', padding: '4px 16px' }}>🎪 Top 100 </span>
+                <Badge backgroundColor='yellow'>
+                    🎪 Daily Top 100
+                </Badge>
             }
-            {accuracy > 99 &&  
-            <span style={{ fontWeight: 700, fontSize: '10px', borderRadius: '9999px', background: 'yellow', color: 'black', padding: '4px 16px' }}>🔭 Super Vision Lv 4</span>
+            {accuracy >= 95 &&  
+                <Badge backgroundColor='black' color='white'>
+                    🔭 Super vision lvl 3
+                </Badge>
             }
+                {timeTaken <= 1 &&  
+                    <Badge backgroundColor='navy' color='yellow'>
+                       ⚡ Lightning fast 
+                    </Badge>
+                }
+            </div>
       </div>
         )}
           </div>
@@ -358,6 +378,7 @@ const calculateAverages = () => {
       />
         {!showPlayAgain ? (
         <ChromePicker 
+        disableAlpha={true}
         color={selectedColor} onChange={handleColorChange} 
     />
         ) : (
@@ -410,11 +431,13 @@ const calculateAverages = () => {
     boxShadow: ' 0 0 2px 0px rgba(0,0,0, .125), 0 0 4px 0px rgba(0,0,0, .125), 0 0 8px 0px rgba(0,0,0, .125), ' 
     }}>
       <h2 style={{margin: '0 0 8px 0', fontSize: '14px', textAlign: 'center' }}>Today</h2>
-      <ol style={{fontSize: '12px', padding: 0, margin: 0 }}>
+      <ol style={{fontSize: '12px', padding: 0, margin: 0, textAlign: 'left', }}>
         {dailyScores.slice(0,10).map((score, index) => (
           <li key={index}>
-              <b style={{ display: 'inline-block', marginRight: '4px' }}>{score.user}</b> 
-              <code>{score.score.toFixed(3)}</code>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
+                  <b style={{ display: 'inline-block', marginLeft: '4px', marginRight: '4px' }}>{score.user}</b> 
+                  <code>{score.score.toFixed(3)}</code>
+              </div>
           </li>
         ))}
       </ol>
