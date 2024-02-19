@@ -338,11 +338,20 @@ const calculateAverages = () => {
             </div>
         }
 
-            <div style={{ display: 'flex', gap: '8px'}}>
-            {score > dailyScores[dailyScores.length-1].score &&  
-                <Badge backgroundColor='yellow'>
-                    🎪 Daily Top 100
-                </Badge>
+            <div style={{ display: 'flex', gap: '8px', paddingBottom: '24px' }}>
+            {
+                dailyScores && dailyScores.length > 0 && score > dailyScores[dailyScores.length - 1].score && (
+                    <Badge backgroundColor='yellow'>
+                        🎪 Daily Top 100
+                    </Badge>
+                )
+            }
+            {
+                allTimeScores && allTimeScores.length > 0 && score > allTimeScores[allTimeScores.length - 1].score && (
+                    <Badge backgroundColor='yellow'>
+                        💎 All-time 100 !!!
+                    </Badge>
+                )
             }
             {accuracy >= 95 &&  
                 <Badge backgroundColor='black' color='white'>
