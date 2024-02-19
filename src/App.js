@@ -323,7 +323,13 @@ const calculateAverages = () => {
         ) : (
       <div>
         {score && <div>
-            <dl style={{marginBottom: '8px'}}>
+
+            <div style={{display: 'flex', alignItems: 'center', gap: '16px'}}>
+                <code style={{padding: '4px', fontSize: '10px', backgroundColor: chroma.contrast(randomColor, 'white') > 4.5? 'white' : 'black', color: randomColor }}>{randomColor}</code> 
+                <code style={{fontSize: '10px', textTransform: 'lowercase'}}> {selectedColor}</code>
+            </div>
+
+            <dl style={{marginBottom: '8px', marginTop: '8px' }}>
                 <dt style={{ fontSize: '10px' }}>Score</dt>
                 <dd style={{fontSize: '48px', fontWeight: 'bold' }}>{score}</dd>
             </dl>
@@ -377,10 +383,12 @@ const calculateAverages = () => {
                 minHeight: '40dvh',
             height: '100%',
             backgroundColor: selectedColor,
-            padding: '16px'
+            paddingLeft: '16px',
+            paddingRight: '16px',
+            paddingTop: '16px',
               }} 
             >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%', backgroundColor: selectedColor }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', maxWidth: '100%', width: '100%', backgroundColor: selectedColor }}>
     <input 
         type="color" 
         value={selectedColor} // Bind the input value to the selectedColor state
@@ -390,6 +398,8 @@ const calculateAverages = () => {
       />
         {!showPlayAgain ? (
         <ChromePicker 
+        style={{maxWidth: '100%',}}
+        width='100%'
         disableAlpha={true}
         color={selectedColor} onChange={handleColorChange} 
     />
@@ -415,7 +425,7 @@ const calculateAverages = () => {
         </div>}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', }}>
         {!showPlayAgain ? (
-            <div style={{textAlign: 'center', paddingTop: '8px', }}>
+            <div style={{textAlign: 'center' }}>
             <button onClick={handleSubmit} className='animated-button'> 
                 <span></span>
                 <span></span>
@@ -472,7 +482,7 @@ const calculateAverages = () => {
       </ol>
     </div>
       </footer>
-        <div style={{position: 'absolute', zIndex: 0, bottom: '8px', fontSize: '12px', left: 0, right: 0, width: '100%'}}>
+        <div style={{position: 'absolute', zIndex: 0, bottom: '16px', fontSize: '12px', left: 0, right: 0, width: '100%'}}>
             <div className='dn db-ns'>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', padding: '0 16px' }}>
               <p style={{margin:0}}><b>Avg. Score</b>: {averages.avgScore}</p>
