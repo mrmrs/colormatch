@@ -14,6 +14,15 @@ const Badge = ({ color = 'black', backgroundColor, ...props }) => {
     )
 }
 
+
+const chromePickerStyles = {
+  default: {
+    hue: { // See the individual picker source for which keys to use
+      height: '16px',
+    },
+  },
+}
+
 function App() {
     //  const [color, setColor] = useState('#ff0000');
   const [randomColor, setRandomColor] = useState(null);
@@ -398,7 +407,8 @@ const calculateAverages = () => {
       />
         {!showPlayAgain ? (
         <ChromePicker 
-        style={{maxWidth: '100%',}}
+        style={{maxWidth: '640px'}}
+        styles={chromePickerStyles}
         width='100%'
         disableAlpha={true}
         color={selectedColor} onChange={handleColorChange} 
@@ -447,14 +457,18 @@ const calculateAverages = () => {
 
       
       </div>
-<footer style={{ gap: '32px', justifyContent: 'center' }} className='dn flex-ns'>
-    <div style={{ padding: '24px 48px', borderRadius: '6px', 
+      <footer style={{ gap: '32px', justifyContent: 'center', 
+      }}
+      className='dn flex-ns'>
+      <div style={{ 
+      color: chroma.contrast(selectedColor, '#ffffff') > 4.5? 'white' : 'black', 
+      padding: '24px 48px', borderRadius: '6px', 
     boxShadow: ' 0 0 2px 0px rgba(0,0,0, .125), 0 0 4px 0px rgba(0,0,0, .125), 0 0 8px 0px rgba(0,0,0, .125), ' 
     }}>
       <h2 style={{margin: '0 0 8px 0', fontSize: '14px', textAlign: 'center' }}>Today</h2>
       <ol style={{fontSize: '12px', padding: 0, margin: 0, textAlign: 'left', }}>
         {dailyScores.slice(0,10).map((score, index) => (
-          <li key={index} style={{ fontSize: '10px', minWidth: '192px', padding: '2px 0', borderBottom: '1px solid', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '32px' }}>
+          <li key={index} style={{ color: 'inherit', fontSize: '10px', minWidth: '192px', padding: '2px 0', borderBottom: '1px solid', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '32px' }}>
               <b style={{ display: 'inline-block', marginRight: '4px' }}>{score.user}</b> 
               <code>{score.score.toFixed(3)}</code>
           </li>
@@ -462,11 +476,13 @@ const calculateAverages = () => {
       </ol>
     </div>
     
-    <div style={{ padding: '24px 48px', borderRadius: '6px',
-    boxShadow: ' 0 0 2px 0px rgba(0,0,0, .125), 0 0 4px 0px rgba(0,0,0, .125), 0 0 8px 0px rgba(0,0,0, .125), ' 
+    <div style={{ 
+      color: chroma.contrast(selectedColor, '#ffffff') > 4.5? 'white' : 'black', 
+        padding: '24px 48px', borderRadius: '6px',
+        boxShadow: ' 0 0 2px 0px rgba(0,0,0, .125), 0 0 4px 0px rgba(0,0,0, .125), 0 0 8px 0px rgba(0,0,0, .125), ' 
     }}>
-      <h2 style={{margin: '0 0 8px 0', fontSize: '14px', textAlign: 'center' }}>All-Time</h2>
-      <ol style={{fontSize: '12px',  padding: 0, margin: 0 }}>
+      <h2 style={{ margin: '0 0 8px 0', fontSize: '14px', textAlign: 'center' }}>All-Time</h2>
+      <ol style={{ fontSize: '12px',  padding: 0, margin: 0 }}>
         {allTimeScores.slice(0,10).map((score, index) => (
           <li key={index} style={{ fontSize: '10px', minWidth: '192px', padding: '2px 0', borderBottom: '1px solid', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '32px' }}>
               <b style={{ display: 'inline-block', marginRight: '4px' }}>{score.user}</b> 
@@ -476,7 +492,9 @@ const calculateAverages = () => {
       </ol>
 
             
-    </div><div className='dn db-ns' style={{padding: '24px 48px'}}>
+      </div><div className='dn db-ns' style={{
+      color: chroma.contrast(selectedColor, '#ffffff') > 4.5? 'white' : 'black', 
+      padding: '24px 48px'}}>
     <h4 style={{fontSize: '14px', margin: '0 0 8px 0' }}>Stats</h4>
             <div style={{ fontSize: '10px', lineHeight: 1.75 }}>
                 <p style={{ borderBottom: '1px solid', margin:0, display: 'flex', justifyContent: 'space-between' }}><b>Avg. Score:</b> <code>{averages.avgScore}</code></p>
