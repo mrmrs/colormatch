@@ -12,7 +12,7 @@ function App() {
   const [selectedColor, setSelectedColor] = useState('');
   const [startTime, setStartTime] = useState(0);
   const [score, setScore] = useState(null);
-  const [timeTaken, setTimeTaken] = useState('');
+  const [timeTaken, setTimeTaken] = useState(0);
   const [accuracy, setAccuracy] = useState('');
   const [elapsedTime, setElapsedTime] = useState(0);
   const [timerId, setTimerId] = useState(null);
@@ -125,7 +125,7 @@ useEffect(() => {
     setSelectedColor('#F0F0F0');
     setStartTime(new Date().getTime());
     setScore(null);
-    setTimeTaken('');
+    setTimeTaken(0);
     setAccuracy('');
     setShowPlayAgain(false);
     setElapsedTime(0);
@@ -210,7 +210,7 @@ useEffect(() => {
      user: username,
     score: combinedScore,
     accuracy: calculatedAccuracy,
-    timeTaken: timeTaken, 
+    timeTaken: timeInSeconds.toFixed(3), 
     selectedColor: selectedColor,
     randomColor: randomColor
   };
