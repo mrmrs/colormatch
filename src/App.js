@@ -311,7 +311,7 @@ const calculateAverages = () => {
               <dl>
                   <dt style={{ visibility: 'hidden' }}>Time</dt>
                   <dd style={{display:'none'}}> {(elapsedTime / 1000).toFixed(2)} seconds</dd>
-                    <dd> {((new Date().getTime() - startTime) / 1000).toFixed(2)} seconds</dd>
+                  <dd> {((new Date().getTime() - startTime) / 1000).toFixed(2)} <small>seconds</small></dd>
               </dl>
 
 
@@ -321,24 +321,26 @@ const calculateAverages = () => {
         ) : (
       <div>
         {score && <div>
-            <dl>
-                <dt>Score</dt>
+            <dl style={{marginBottom: '8px'}}>
+                <dt style={{ fontSize: '10px' }}>Score</dt>
                 <dd style={{fontSize: '48px', fontWeight: 'bold' }}>{score}</dd>
             </dl>
-          <dl>
-              <dt style={{ marginBottom: '4px' }}>Time</dt>
+            <div style={{ display: 'flex', gap: '32px' }}>
+          <dl style={{ margin: 0}}>
+              <dt style={{ marginBottom: '4px', fontSize: '10px' }}>Time</dt>
               <dd>
-                  <b>{timeTaken}</b> seconds
+                  <b>{timeTaken}</b> <small>seconds</small>
               </dd>
           </dl>
-            <dl>
-              <dt style={{ marginBottom: '4px' }}>Accuracy</dt>
-                <dd style={{fontWeight: 'bold'}}>{accuracy}%</dd>
+            <dl style={{ margin: 0}}>
+              <dt style={{ marginBottom: '4px', fontSize: '10px', }}>Accuracy</dt>
+              <dd style={{fontWeight: 'bold'}}>{accuracy.toFixed(4)}%</dd>
             </dl>
-            </div>
+        </div>
+        </div>
         }
 
-            <div style={{ display: 'flex', gap: '8px', paddingBottom: '24px' }}>
+            <div style={{ display: 'flex', gap: '8px', paddingBottom: '16px', paddingTop: '16px' }}>
             {
                 dailyScores && dailyScores.length > 0 && score > dailyScores[dailyScores.length - 1].score && (
                     <Badge backgroundColor='yellow'>
@@ -370,14 +372,13 @@ const calculateAverages = () => {
             <div 
               style={{ 
                 minWidth: '320px',
-                height: '50dvh', 
-                  minHeight: '30dvh',
+                minHeight: '30dvh',
             backgroundColor: 'white',
   backgroundSize: '8px 8px',
   backgroundImage: 'linear-gradient(to right, #f6f6f6  1px, transparent 1px), linear-gradient(to bottom, #f6f6f6 1px, transparent 1px)',
               }} 
             >
-                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%', backgroundColor: selectedColor }}>
+                <div style={{ padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%', backgroundColor: selectedColor }}>
     <input 
         type="color" 
         value={selectedColor} // Bind the input value to the selectedColor state
@@ -466,8 +467,8 @@ const calculateAverages = () => {
       </ol>
     </div>
       </footer>
-        <div style={{ position: 'absolute', bottom: '16px', fontSize: '12px', left: 0, right: 0, width: '100%'}}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+        <div style={{position: 'absolute', bottom: '8px', fontSize: '12px', left: 0, right: 0, width: '100%'}}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', padding: '0 16px' }}>
               <p style={{margin:0}}><b>Avg. Score</b>: {averages.avgScore}</p>
               <p style={{margin:0, display: 'none'}}><b>Time</b>: {averages.avgTime}</p>
               <p style={{margin:0}}><b>Avg. Accuracy</b>: {averages.avgAccuracy}</p>

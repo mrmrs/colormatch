@@ -5,6 +5,7 @@ html, body {
 }
 
 * {
+    box-sizing: border-box;
     transition: background-color .15s ease, color .15s ease, border-color .15s ease;    
     user-select: none;
 }
