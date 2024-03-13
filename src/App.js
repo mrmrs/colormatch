@@ -466,6 +466,8 @@ useEffect(() => {
           </li>
         ))}
       </ol>
+      <button style={{ appearance: 'none', WebKitAppearance: 'none', padding: 0, border: 0, background: 'transparent', fontSize: '10px', cursor: 'pointer', fontWeight: 'bold', textAlign: 'left', color: 'inherit' }} onClick={() => setShowDailyTop100Modal(true)}>Top 100 (Daily)</button>
+      <button style={{ appearance: 'none', WebKitAppearance: 'none', padding: 0, border: 0, background: 'transparent', fontSize: '10px', cursor: 'pointer', fontWeight: 'bold', textAlign: 'left', color: 'inherit' }} onClick={() => setShowAllTimeTop100Modal(true)}>Top 100 (All-time)</button>
     </div>
         )}
                 </div>
