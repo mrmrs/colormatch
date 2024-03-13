@@ -407,8 +407,8 @@ const calculateAverages = () => {
       />
         {!showPlayAgain ? (
         <ChromePicker 
-        style={{maxWidth: '640px'}}
         styles={chromePickerStyles}
+        style={{ maxWidth: '300px' }}
         width='100%'
         disableAlpha={true}
         color={selectedColor} onChange={handleColorChange} 
