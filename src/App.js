@@ -457,7 +457,7 @@ const calculateAverages = () => {
 
       
       </div>
-      <footer style={{ gap: '32px', justifyContent: 'space-between', padding: '32px 16px 0px 16px', margin: '0 auto', maxWidth: '800px' }}
+      <footer style={{ gap: '32px', justifyContent: 'space-between', padding: '16px 16px 0px 16px', margin: '0 auto', maxWidth: '800px' }}
       className='dn flex-ns'>
       <div style={{ 
           color: chroma.contrast(selectedColor, '#ffffff') > 4.5? 'white' : 'black', 
