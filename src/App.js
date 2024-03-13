@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import chroma from 'chroma-js';
 import { RefreshCcw } from 'feather-icons-react';
+import { v4 as uuidv4 } from 'uuid'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ChromePicker } from 'react-color';
@@ -23,6 +24,25 @@ const chromePickerStyles = {
   },
 }
 
+
+const ScoreModal = ({ isOpen, onClose, scores, title, currentUser }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div style={{ position: 'fixed', top: '0', left: '0%', right: 0, bottom: 0, overflow: 'scroll', backgroundColor: 'white', padding: '0 16px 32px 16px', zIndex: 100 }}>
+      <button onClick={onClose} style={{ fontSize: '10px', position: 'absolute', top: '16px', right: '16px', border: 0, background: 'transparent',textAlign: 'right' }}>Close</button>
+      <h2 style={{ textAlign: 'center', marginTop: '1em', marginBottom: '2em', fontSize: '16px', fontFamily: 'monospace',  }}>{title}</h2>
+      <ol style={{ maxWidth: "32ch", margin: '0 auto', padding: '0 16px' }}>
+        {scores.map((score, index) => (
+            <li style={{backgroundColor: score.user === currentUser ? '#ffff99': '#fff', fontSize: '10px', lineHeight: 1.5 }}
+              id={score.user === currentUser ? `currentUserScore_${title.replace(/\s/g, '')}` : null}
+            key={uuidv4()}><span style={{ display: 'flex', justifyContent: 'space-between'}}><b>{score.user}</b> <code>{score.score.toFixed(3)}</code></span></li>
+        ))}
+      </ol>
+    </div>
+  );
+};
+
 function App() {
     //  const [color, setColor] = useState('#ff0000');
   const [randomColor, setRandomColor] = useState(null);
@@ -35,6 +55,9 @@ function App() {
   const [timerId, setTimerId] = useState(null);
   const [dailyScores, setDailyScores] = useState([]);
   const [allTimeScores, setAllTimeScores] = useState([]);
+  const [showDailyTop100Modal, setShowDailyTop100Modal] = useState(false);
+  const [showAllTimeTop100Modal, setShowAllTimeTop100Modal] = useState(false);
+
   const [pixelPerfectBadge, setPixelPerfectBadge] = useState(false);
 
   const [username, setUsername] = useState(() => localStorage.getItem('username') || '');
@@ -277,6 +300,20 @@ const calculateAverages = () => {
 
   const averages = calculateAverages();
 
+useEffect(() => {
+  const handleEsc = (event) => {
+    if (event.keyCode === 27) {
+      setShowDailyTop100Modal(false);
+      setShowAllTimeTop100Modal(false);
+    }
+  };
+  window.addEventListener('keydown', handleEsc);
+
+  return () => {
+    window.removeEventListener('keydown', handleEsc);
+  };
+}, []);
+
   useEffect(() => {
     startNewGame(); // Start a game when the component mounts
   }, []);
@@ -299,7 +336,7 @@ const calculateAverages = () => {
     }, [handleSubmit]);
 
   return (
-      <div style={{ height: '100dvh', width: '100%', 
+      <div style={{ height: '100dvh', width: '100%', position: 'relative',
       backgroundColor: selectedColor,
       //backgroundSize: '8px 8px',  backgroundImage: 'linear-gradient(to right, #f6f6f6  1px, transparent 1px), linear-gradient(to bottom, #f6f6f6 1px, transparent 1px)',
       }}>
@@ -311,7 +348,7 @@ const calculateAverages = () => {
           <div 
             style={{ 
               minWidth: '320px',
-              minHeight: '40dvh',
+              minHeight: '38dvh',
               backgroundColor: randomColor,
               color: chroma.contrast(randomColor, '#ffffff') > 4? 'white' : 'black', 
               display: 'flex', alignItems: 'center', justifyContent: 'center'
@@ -389,7 +426,7 @@ const calculateAverages = () => {
             <div 
               style={{ 
                 minWidth: '320px',
-                minHeight: '40dvh',
+                minHeight: '38dvh',
             backgroundColor: selectedColor,
             paddingLeft: '16px',
             paddingRight: '16px',
@@ -398,21 +435,22 @@ const calculateAverages = () => {
               }} 
             >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', maxWidth: '100%', width: '100%', backgroundColor: selectedColor }}>
-    <input 
-        type="color" 
-        value={selectedColor} // Bind the input value to the selectedColor state
-        onChange={handleColorChange} 
-        onClick={handleColorInputOpen} 
-        style={{ display: 'none' }}
-      />
         {!showPlayAgain ? (
-        <ChromePicker 
-        styles={chromePickerStyles}
-        style={{ maxWidth: '300px' }}
-        width='100%'
-        disableAlpha={true}
-        color={selectedColor} onChange={handleColorChange} 
-    />
+            <div style={{width: '100%', maxWidth: '300px'}}>
+              <input 
+                type="color" 
+                value={selectedColor} // Bind the input value to the selectedColor state
+                onChange={handleColorChange} 
+                onClick={handleColorInputOpen} 
+                style={{ display: 'none' }}
+              />
+                <ChromePicker 
+                styles={chromePickerStyles}
+                width='100%'
+                disableAlpha={true}
+                color={selectedColor} onChange={handleColorChange} 
+                />
+        </div>
         ) : (
 <div style={{ 
       color: chroma.contrast(selectedColor, '#ffffff') > 4? 'white' : 'black', 
@@ -471,6 +509,7 @@ const calculateAverages = () => {
           </li>
         ))}
       </ol>
+      <button style={{ appearance: 'none', WebKitAppearance: 'none', padding: 0, border: 0, background: 'transparent', fontSize: '10px', cursor: 'pointer', fontWeight: 'bold', textAlign: 'left', color: 'inherit' }} onClick={() => setShowDailyTop100Modal(true)}>Show Top 100</button>
     </div>
     
     <div style={{ color: chroma.contrast(selectedColor, '#ffffff') > 4.5? 'white' : 'black' }}>
@@ -483,8 +522,7 @@ const calculateAverages = () => {
         </li>
         ))}
       </ol>
-
-            
+      <button style={{ appearance: 'none', WebKitAppearance: 'none', padding: 0, border: 0, background: 'transparent', fontSize: '10px', cursor: 'pointer', fontWeight: 'bold', textAlign: 'left', color: 'inherit' }} onClick={() => setShowAllTimeTop100Modal(true)}>Show Top 100</button>
       </div><div className='dn db-ns' style={{ color: chroma.contrast(selectedColor, '#ffffff') > 4.5? 'white' : 'black' }}>
     <h4 style={{fontSize: '14px', margin: '0 0 8px 0', minWidth: '192px' }}>Stats</h4>
             <div style={{ fontSize: '10px', lineHeight: 1.75 }}>
@@ -505,6 +543,20 @@ const calculateAverages = () => {
           <ToastContainer position="top-center" autoClose={5000} />
           {/* ... rest of your component */}
         </div>
+<ScoreModal 
+  isOpen={showDailyTop100Modal} 
+  onClose={() => setShowDailyTop100Modal(false)} 
+  scores={dailyScores} 
+  title="Top 100 Daily Scores"
+  currentUser={username}
+/>
+<ScoreModal 
+  isOpen={showAllTimeTop100Modal} 
+  onClose={() => setShowAllTimeTop100Modal(false)} 
+  scores={allTimeScores} 
+  title="Top 100 All-Time Scores"
+  currentUser={username}
+/>
     </div>
   );
 }
