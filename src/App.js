@@ -494,10 +494,10 @@ const calculateAverages = () => {
               </div>
           </div>
       </footer>
-        <div style={{position: 'absolute', zIndex: 0, bottom: '16px', fontSize: '12px', left: 0, right: 0, width: '100%'}}>
+        <div style={{ zIndex: '-100', position: 'absolute', zIndex: 0, bottom: '16px', fontSize: '12px', left: 0, right: 0, width: '100%'}}>
           <small style={{ marginTop: '8px', display: 'block', textAlign: 'center', 
               color: chroma.contrast(selectedColor, '#ffffff') > 4? 'white' : 'black', 
-          }}>This game has been played {count} times</small>
+          }}>{count} plays</small>
         </div>
       </header>
 
