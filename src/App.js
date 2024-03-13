@@ -29,7 +29,7 @@ const ScoreModal = ({ isOpen, onClose, scores, title, currentUser }) => {
   if (!isOpen) return null;
 
   return (
-    <div style={{ position: 'fixed', top: '0', left: '0%', right: 0, bottom: 0, overflow: 'scroll', backgroundColor: 'white', padding: '0 16px 32px 16px', zIndex: 100 }}>
+    <div style={{ position: 'fixed', top: '0', left: '0%', right: 0, bottom: 0, overflow: 'scroll', backgroundColor: 'white', padding: '0 16px 32px 16px', zIndex: 9999 }}>
       <button onClick={onClose} style={{ fontSize: '10px', position: 'absolute', top: '16px', right: '16px', border: 0, background: 'transparent',textAlign: 'right' }}>Close</button>
       <h2 style={{ textAlign: 'center', marginTop: '1em', marginBottom: '2em', fontSize: '16px', fontFamily: 'monospace',  }}>{title}</h2>
       <ol style={{ maxWidth: "32ch", margin: '0 auto', padding: '0 16px' }}>
@@ -348,7 +348,7 @@ useEffect(() => {
           <div 
             style={{ 
               minWidth: '320px',
-              minHeight: '38dvh',
+              minHeight: '40dvh',
               backgroundColor: randomColor,
               color: chroma.contrast(randomColor, '#ffffff') > 4? 'white' : 'black', 
               display: 'flex', alignItems: 'center', justifyContent: 'center'
@@ -426,17 +426,16 @@ useEffect(() => {
             <div 
               style={{ 
                 minWidth: '320px',
-                minHeight: '38dvh',
-            backgroundColor: selectedColor,
-            paddingLeft: '16px',
-            paddingRight: '16px',
-            paddingTop: '16px',
-            paddingBottom: '16px',
+                minHeight: '40dvh',
+                backgroundColor: selectedColor,
+                paddingLeft: '16px',
+                paddingRight: '16px',
+                paddingTop: '16px',
+                paddingBottom: '16px',
+                height: '100%',
               }} 
             >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', maxWidth: '100%', width: '100%', backgroundColor: selectedColor }}>
-        {!showPlayAgain ? (
-            <div style={{width: '100%', maxWidth: '300px'}}>
               <input 
                 type="color" 
                 value={selectedColor} // Bind the input value to the selectedColor state
@@ -444,13 +443,15 @@ useEffect(() => {
                 onClick={handleColorInputOpen} 
                 style={{ display: 'none' }}
               />
+        {!showPlayAgain ? (
+            <div style={{ maxWidth: '300px', width: '100%'}}>
                 <ChromePicker 
                 styles={chromePickerStyles}
                 width='100%'
                 disableAlpha={true}
                 color={selectedColor} onChange={handleColorChange} 
                 />
-        </div>
+            </div>
         ) : (
 <div style={{ 
       color: chroma.contrast(selectedColor, '#ffffff') > 4? 'white' : 'black', 
@@ -472,8 +473,8 @@ useEffect(() => {
         </div>}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', }}>
         {!showPlayAgain ? (
-            <div style={{textAlign: 'center' }}>
-            <button onClick={handleSubmit} className='animated-button'> 
+            <div style={{textAlign: 'center', zIndex: 999 }}>
+            <button onClick={handleSubmit} className='animated-button' style={{zIndex: '999999' }}> 
                 <span></span>
                 <span></span>
                 <span></span>
@@ -512,7 +513,7 @@ useEffect(() => {
       <button style={{ appearance: 'none', WebKitAppearance: 'none', padding: 0, border: 0, background: 'transparent', fontSize: '10px', cursor: 'pointer', fontWeight: 'bold', textAlign: 'left', color: 'inherit' }} onClick={() => setShowDailyTop100Modal(true)}>Show Top 100</button>
     </div>
     
-    <div style={{ color: chroma.contrast(selectedColor, '#ffffff') > 4.5? 'white' : 'black' }}>
+    <div style={{ color: chroma.contrast(selectedColor, '#ffffff') > 4.5? 'white' : 'black', backgroundColor: selectedColor, zIndex: '99' }}>
       <h2 style={{ margin: '0 0 8px 0', fontSize: '14px', textAlign: 'center' }}>All-Time</h2>
       <ol style={{ fontSize: '12px',  padding: 0, margin: 0 }}>
         {allTimeScores.slice(0,10).map((score, index) => (
